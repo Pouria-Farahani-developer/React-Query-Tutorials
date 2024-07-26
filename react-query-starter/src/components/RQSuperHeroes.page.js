@@ -5,17 +5,34 @@ const fetchSuperHeroes = () => {
   return axios.get("http://localhost:4000/superheroes");
 };
 
+
+
+
+
+
 export const RQSuperHeroesPage = () => {
+
+
+  const onSuccess = () => {
+    console.log('Perform side effect after data fetching')
+  }
+  
+  
+  const onError = () => {
+    console.log('Perform side effect after encountering error')
+  }
+
+
   const { isLoading, data, error, isError, isFetching  , refetch } = useQuery(
     "Super-Heroes",
     fetchSuperHeroes,
     {
-      enabled:false
+      onSuccess,
+      onError
     }
   );
 
 
-  //refetch is a handler function that return usequery for manage refetch manually
 
   
 
@@ -31,7 +48,6 @@ export const RQSuperHeroesPage = () => {
   return (
     <>
       <h2>React Query Super Heroes Page</h2>
-      <button onClick={refetch}>Fetch Heroes</button>
       {data?.data.map((item) => (
         <h3 key={item.name}>{item.name}</h3>
       ))}
