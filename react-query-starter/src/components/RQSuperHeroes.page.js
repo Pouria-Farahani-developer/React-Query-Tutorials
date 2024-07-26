@@ -28,7 +28,11 @@ export const RQSuperHeroesPage = () => {
     fetchSuperHeroes,
     {
       onSuccess,
-      onError
+      onError,
+      select:(data) => { // automatically recive data api 
+        const superHeroNames = data?.data.map((hero) => hero.name)
+        return superHeroNames //infact destructure data to array
+      }
     }
   );
 
@@ -45,11 +49,13 @@ export const RQSuperHeroesPage = () => {
     return <h2>{error.message}</h2>;
   }
 
+  
+
   return (
     <>
       <h2>React Query Super Heroes Page</h2>
-      {data?.data.map((item) => (
-        <h3 key={item.name}>{item.name}</h3>
+      {data.map((heroName) => (
+        <h3 key={heroName}>{heroName}</h3>
       ))}
     </>
   );
