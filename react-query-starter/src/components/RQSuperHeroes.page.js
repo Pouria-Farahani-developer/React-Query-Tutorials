@@ -2,7 +2,7 @@ import axios from "axios";
 import { useQuery } from "react-query";
 
 const fetchSuperHeroes = () => {
-  return axios.get("http://localhost:4000/susperheroes");
+  return axios.get("http://localhost:4000/superheroes");
 };
 
 export const RQSuperHeroesPage = () => {
@@ -11,8 +11,11 @@ export const RQSuperHeroesPage = () => {
     fetchSuperHeroes,
     {
       // staleTime: 0, By default, this value is always set to zero so that the React Query value is updated every time the page is called.
-      cacheTime: 5000,
       staleTime: 3000,
+      // refetchOnMount: "always",
+      refetchOnMount: true, //When we are using refetch, it has nothing to do with stale and the best option is true
+      // refetchOnWindowFocus: "always",
+      refetchOnWindowFocus: true,
     }
   );
 
