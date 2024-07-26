@@ -10,12 +10,9 @@ export const RQSuperHeroesPage = () => {
     "Super-Heroes",
     fetchSuperHeroes,
     {
-      // staleTime: 0, By default, this value is always set to zero so that the React Query value is updated every time the page is called.
-      staleTime: 3000,
-      // refetchOnMount: "always",
-      refetchOnMount: true, //When we are using refetch, it has nothing to do with stale and the best option is true
-      // refetchOnWindowFocus: "always",
-      refetchOnWindowFocus: true,
+      // refetchInterval: false,
+      refetchInterval: 2000,
+      refetchIntervalInBackground: true, // will continue to pull data even when the browser is not in focus
     }
   );
 
