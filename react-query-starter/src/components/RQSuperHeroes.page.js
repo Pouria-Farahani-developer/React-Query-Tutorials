@@ -1,38 +1,62 @@
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
-import { useSuperHeroesData } from "../hooks/useSuperHeroesData";
+import React, { useState } from 'react'
+import {useSuperHeroesData , useAddSuperHeroData} from "../hooks/useSuperHeroesData"
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 
-export const RQSuperHeroesPage = () => {
-  const onSuccess = () => {
-    console.log("Perform side effect after data fetching");
-  };
 
-  const onError = () => {
-    console.log("Perform side effect after encountering error");
-  };
+function RQSuperHeroesPage() {
+  const [name,setName]=useState('');
+  const [alterEgo,setAlterEgo]=useState('')
 
-  const { isLoading, data, error, isError } = useSuperHeroesData(
-    onSuccess,
-    onError
-  );
-
-  if (isLoading) {
-    return <h2>Loading ...</h2>;
+  const onSuccess = (data) => {
+    console.log('Perform side effect after data fetching',data)
   }
 
-  if (isError) {
-    return <h2>{error.message}</h2>;
+  const onError = (error) => {
+    console.log('Perform side effect after data fetching',error)
   }
 
-  return (
-    <>
-      <h2>React Query Super Heroes Page</h2>
-      {data?.data.map((hero) => {
-        return (
-          <div key={hero.id}>
-            <Link to={`rq-super-heroes/${hero.id}`}>{hero.name}</Link>
-          </div>
-        );
-      })}
-    </>
-  );
-};
+
+ const {isLoading,data,isError,error,isFetching,refetch} = useSuperHeroesData(onSuccess,onError);
+
+ const {mutate:addHero} = useAddSuperHeroData()
+
+
+ const handleAddHeroClick = () => {
+  console.log({name,alterEgo})
+  const hero = {name , alterEgo}
+  addHero(hero)
+ }
+
+
+ if(isLoading || isFetching){
+  return <h2>Loading...</h2>
+ }
+
+
+ if(isError){
+  return <h2>{error.message}</h2>
+ }
+
+
+
+ return(
+  <>
+    <h2>RQ  Super Heroes Page</h2>
+    <div>
+      <input type='text' value={name} onChange={(e) => setName(e.target.value)}/>
+      <input type='text' value={alterEgo} onChange={(e) => setAlterEgo(e.target.value)}/>
+      <button onClick={handleAddHeroClick}>Add Hero</button>
+    </div>
+    <button onClick={refetch}>Fetch heroes</button>
+    {data?.data.map((hero) => {
+      return(
+        <div key={hero.id}>
+          <Link  to={`/rq-super-heroes/${hero.id}`}>{hero.name}</Link>
+        </div>
+      )
+    })}
+  </>
+ )
+}
+
+export default RQSuperHeroesPage
